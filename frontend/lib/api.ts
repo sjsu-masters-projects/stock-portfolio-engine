@@ -25,6 +25,11 @@ export interface Allocation {
   "5day_return_pct": number;
 }
 
+export interface TrendEntry {
+  date: string;
+  portfolio_value: number;
+}
+
 export interface PortfolioResponse {
   amount: number;
   strategies: string[];
@@ -32,6 +37,7 @@ export interface PortfolioResponse {
   allocations: Allocation[];
   total_invested: number;
   leftover_cash: number;
+  trend: TrendEntry[];
 }
 
 export interface HistoryEntry {
