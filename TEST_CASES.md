@@ -1,13 +1,19 @@
 # Stock Portfolio Engine - Grader Test Cases
 
 ## Setup Instructions
-1. **Unzip** the project folder.
-2. **Start the Backend**:
+
+### Option A: Live Demo
+- **Frontend**: [stock-portfolio-engine-iota.vercel.app](https://stock-portfolio-engine-iota.vercel.app)
+- **Backend API**: [stock-portfolio-engine.onrender.com](https://stock-portfolio-engine.onrender.com)
+- **Note**: The backend runs on Render's free tier — the first request may take ~30 seconds to wake from a cold start.
+
+### Option B: Run Locally
+1. **Start the Backend**:
    - Open a terminal and navigate to the `backend` folder.
    - Run: `pip install -r requirements.txt`
    - Run: `uvicorn app.main:app --reload`
    - The backend will start at `http://localhost:8000`.
-3. **Start the Frontend**:
+2. **Start the Frontend**:
    - Open a new terminal and navigate to the `frontend` folder.
    - Run: `npm install`
    - Run: `npm run dev`
@@ -53,8 +59,8 @@
 - **Action**: Navigate to the "Compare" tab. Set amount to `$10,000`. Select "Index" for Portfolio A, and "Value" for Portfolio B. Click "Compare Portfolios".
 - **Expected Result**: The app generates both portfolios simultaneously and displays a side-by-side comparison of their values, risk metrics, and historical trend lines. A "WINNER" badge is highlighted on the one with the higher 5-day simulated value.
 
-### Test Case 10: Currency Conversion & Dark Mode
+### Test Case 10: Error Handling & API Resilience
 - **Action**: 
-  1. Click the "USD" dropdown in the top right Header and select "EUR". Observe the dropdown state changes. (Note: Due to time constraints, local USD string conversion might not universally update all charts, but the UI state changes successfully).
-  2. Click the Moon/Sun icon next to the currency dropdown.
-- **Expected Result**: The entire application smoothly transitions from Light mode to a premium Dark Mode with glassmorphic backgrounds adapting correctly to the new dark color palette.
+  1. Generate a portfolio with an extremely large amount (e.g., `$999,999,999`).
+  2. Observe the dashboard loading states while the backend processes live Yahoo Finance data.
+- **Expected Result**: The application handles the large amount gracefully — the backend still allocates shares correctly based on performance weights, all price data loads with proper loading skeletons, and no UI crashes occur. If any external API call fails, the relevant section shows a friendly fallback instead of breaking the page.

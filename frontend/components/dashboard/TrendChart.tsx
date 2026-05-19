@@ -1,5 +1,7 @@
 "use client";
 
+import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 import { TrendEntry } from "@/types";
 import { Card } from "@/components/ui/Card";
@@ -10,7 +12,16 @@ interface Props {
 }
 
 export function TrendChart({ trend }: Props) {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   if (!trend || trend.length === 0) return null;
+
+  const isDark = mounted && resolvedTheme === "dark";
+  const tickColor = isDark ? "#94a3b8" : "#64748b";
+  const gridColor = isDark ? "#334155" : "#e2e8f0";
+  const refLineColor = isDark ? "#64748b" : "#94a3b8";
 
   const data = trend.map((t) => ({
     date: fmtDate(t.date),
@@ -47,16 +58,16 @@ export function TrendChart({ trend }: Props) {
           <AreaChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
             <defs>
               <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={strokeColor} stopOpacity={0.2} />
+                <stop offset="5%" stopColor={strokeColor} stopOpacity={0.3} />
                 <stop offset="95%" stopColor={strokeColor} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#cbd5e1" strokeOpacity={0.2} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} strokeOpacity={0.5} />
             <XAxis 
               dataKey="date" 
               axisLine={false} 
               tickLine={false} 
-              tick={{ fontSize: 11, fill: "#94a3b8" }} 
+              tick={{ fontSize: 11, fill: tickColor }} 
               dy={10}
             />
             <YAxis 
@@ -64,22 +75,22 @@ export function TrendChart({ trend }: Props) {
               axisLine={false} 
               tickLine={false}
               tickFormatter={(val) => `$${(val / 1000).toFixed(1)}k`}
-              tick={{ fontSize: 11, fill: "#94a3b8" }}
+              tick={{ fontSize: 11, fill: tickColor }}
               dx={-10}
             />
             <RechartsTooltip
               content={({ active, payload, label }) => {
                 if (!active || !payload?.length) return null;
                 return (
-                  <div className="glass p-3 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700">
-                    <p className="text-xs text-slate-500 mb-1">{label}</p>
+                  <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">{label}</p>
                     <p className="font-bold text-slate-900 dark:text-white">{fmt(payload[0].value as number)}</p>
                   </div>
                 );
               }}
             />
             {data.length > 1 && (
-              <ReferenceLine y={firstVal} stroke="#94a3b8" strokeDasharray="4 4" strokeOpacity={0.5} />
+              <ReferenceLine y={firstVal} stroke={refLineColor} strokeDasharray="4 4" strokeOpacity={0.5} />
             )}
             <Area
               type="monotone"

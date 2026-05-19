@@ -20,7 +20,11 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "..", "portfolio.db")
+DB_PATH = (
+    settings.database_path
+    if os.path.isabs(settings.database_path)
+    else os.path.join(os.path.dirname(__file__), "..", settings.database_path)
+)
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS strategies (

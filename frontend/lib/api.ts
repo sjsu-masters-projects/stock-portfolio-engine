@@ -50,7 +50,7 @@ export const api = {
       }
     ),
 
-  getCurrencies: () => request<Record<string, number>>("/api/currencies"),
+
 
   // Saved portfolios
   listPortfolios: () => request<any[]>("/api/portfolios"),
