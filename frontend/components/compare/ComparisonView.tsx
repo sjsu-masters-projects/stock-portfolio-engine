@@ -3,12 +3,17 @@
 import { useState } from "react";
 import { StrategyInfo, StrategyKey } from "@/types";
 import { api } from "@/lib/api";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { PortfolioHero } from "@/components/dashboard/PortfolioHero";
-import { TrendChart } from "@/components/dashboard/TrendChart";
 import { RiskMetrics } from "@/components/dashboard/RiskMetrics";
+
+const TrendChart = dynamic(
+  () => import("@/components/dashboard/TrendChart").then((m) => m.TrendChart),
+  { ssr: false }
+);
 import { ArrowLeft, GitCompare, Check } from "lucide-react";
 import { STRATEGY_META } from "@/lib/constants";
 import clsx from "clsx";

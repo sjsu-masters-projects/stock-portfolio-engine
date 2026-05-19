@@ -44,6 +44,7 @@ class AllocationEngine:
         """
         Converts raw returns to allocation weights.
         Shifts values to be >= 0, then normalizes.
+        Applies a minimum floor weight so every stock gets at least some allocation.
         Falls back to equal weight when all are identical.
         """
         symbols = list(returns.keys())
@@ -57,7 +58,18 @@ class AllocationEngine:
             n = len(symbols)
             return {s: 1 / n for s in symbols} if n > 0 else {}
 
-        return {s: shifted[i] / total for i, s in enumerate(symbols)}
+        raw = {s: shifted[i] / total for i, s in enumerate(symbols)}
+
+        # Ensure every stock gets at least a 2% floor weight
+        n = len(symbols)
+        floor = 0.02
+        for s in symbols:
+            if raw[s] < floor:
+                raw[s] = floor
+
+        # Re-normalize so weights sum to 1.0
+        weight_total = sum(raw.values())
+        return {s: raw[s] / weight_total for s in symbols}
 
     @staticmethod
     def _compute_trend(close: pd.DataFrame, shares_map: dict[str, int]) -> list[dict[str, Any]]:
