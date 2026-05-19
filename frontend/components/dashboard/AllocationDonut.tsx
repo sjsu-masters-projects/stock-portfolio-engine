@@ -37,39 +37,43 @@ export function AllocationDonut({ allocations, totalValue }: Props) {
       </div>
 
       <div className="flex-1 relative">
-        <ResponsiveContainer width="100%" height={160}>
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={80}
-              paddingAngle={2}
-              dataKey="value"
-              stroke="none"
-              animationDuration={1000}
-            >
-              {data.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <RechartsTooltip
-              content={({ active, payload }) => {
-                if (!active || !payload?.length) return null;
-                const d = payload[0].payload;
-                return (
-                  <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-xl text-sm border border-slate-200 dark:border-slate-700">
-                    <p className="font-bold text-slate-900 dark:text-white">{d.name}</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">{d.fullName}</p>
-                    <p className="text-brand-600 dark:text-brand-400 font-medium">{fmt(d.value)}</p>
-                    <p className="text-slate-400 dark:text-slate-500 text-xs mt-0.5">{pct(d.weight)} of portfolio</p>
-                  </div>
-                );
-              }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        {mounted ? (
+          <ResponsiveContainer width="100%" height={160}>
+            <PieChart>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={80}
+                paddingAngle={2}
+                dataKey="value"
+                stroke="none"
+                animationDuration={1000}
+              >
+                {data.map((_, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <RechartsTooltip
+                content={({ active, payload }) => {
+                  if (!active || !payload?.length) return null;
+                  const d = payload[0].payload;
+                  return (
+                    <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-xl text-sm border border-slate-200 dark:border-slate-700">
+                      <p className="font-bold text-slate-900 dark:text-white">{d.name}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">{d.fullName}</p>
+                      <p className="text-brand-600 dark:text-brand-400 font-medium">{fmt(d.value)}</p>
+                      <p className="text-slate-400 dark:text-slate-500 text-xs mt-0.5">{pct(d.weight)} of portfolio</p>
+                    </div>
+                  );
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        ) : (
+          <div style={{ height: 160, width: "100%" }} />
+        )}
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-medium">Total</span>

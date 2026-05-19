@@ -54,55 +54,59 @@ export function TrendChart({ trend }: Props) {
       </div>
 
       <div className="flex-1 -ml-4">
-        <ResponsiveContainer width="100%" height={180}>
-          <AreaChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
-            <defs>
-              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={strokeColor} stopOpacity={0.3} />
-                <stop offset="95%" stopColor={strokeColor} stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} strokeOpacity={0.5} />
-            <XAxis 
-              dataKey="date" 
-              axisLine={false} 
-              tickLine={false} 
-              tick={{ fontSize: 11, fill: tickColor }} 
-              dy={10}
-            />
-            <YAxis 
-              domain={[minVal * 0.99, maxVal * 1.01]} 
-              axisLine={false} 
-              tickLine={false}
-              tickFormatter={(val) => `$${(val / 1000).toFixed(1)}k`}
-              tick={{ fontSize: 11, fill: tickColor }}
-              dx={-10}
-            />
-            <RechartsTooltip
-              content={({ active, payload, label }) => {
-                if (!active || !payload?.length) return null;
-                return (
-                  <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700">
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">{label}</p>
-                    <p className="font-bold text-slate-900 dark:text-white">{fmt(payload[0].value as number)}</p>
-                  </div>
-                );
-              }}
-            />
-            {data.length > 1 && (
-              <ReferenceLine y={firstVal} stroke={refLineColor} strokeDasharray="4 4" strokeOpacity={0.5} />
-            )}
-            <Area
-              type="monotone"
-              dataKey="value"
-              stroke={strokeColor}
-              strokeWidth={2}
-              fillOpacity={1}
-              fill={`url(#${gradientId})`}
-              activeDot={{ r: 6, strokeWidth: 0 }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+        {mounted ? (
+          <ResponsiveContainer width="100%" height={180}>
+            <AreaChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
+              <defs>
+                <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={strokeColor} stopOpacity={0.3} />
+                  <stop offset="95%" stopColor={strokeColor} stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} strokeOpacity={0.5} />
+              <XAxis 
+                dataKey="date" 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fontSize: 11, fill: tickColor }} 
+                dy={10}
+              />
+              <YAxis 
+                domain={[minVal * 0.99, maxVal * 1.01]} 
+                axisLine={false} 
+                tickLine={false}
+                tickFormatter={(val) => `$${(val / 1000).toFixed(1)}k`}
+                tick={{ fontSize: 11, fill: tickColor }}
+                dx={-10}
+              />
+              <RechartsTooltip
+                content={({ active, payload, label }) => {
+                  if (!active || !payload?.length) return null;
+                  return (
+                    <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">{label}</p>
+                      <p className="font-bold text-slate-900 dark:text-white">{fmt(payload[0].value as number)}</p>
+                    </div>
+                  );
+                }}
+              />
+              {data.length > 1 && (
+                <ReferenceLine y={firstVal} stroke={refLineColor} strokeDasharray="4 4" strokeOpacity={0.5} />
+              )}
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke={strokeColor}
+                strokeWidth={2}
+                fillOpacity={1}
+                fill={`url(#${gradientId})`}
+                activeDot={{ r: 6, strokeWidth: 0 }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        ) : (
+          <div style={{ height: 180, width: "100%" }} />
+        )}
       </div>
     </Card>
   );
