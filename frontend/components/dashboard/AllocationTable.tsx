@@ -41,12 +41,12 @@ export function AllocationTable({ allocations, onRowClick }: Props) {
   };
 
   return (
-    <Card className="p-0 overflow-hidden flex flex-col h-full">
-      <div className="p-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
+    <Card className="p-0 overflow-hidden">
+      <div className="p-4 border-b border-slate-100 dark:border-slate-800">
         <h3 className="font-semibold text-slate-900 dark:text-white">Holdings</h3>
       </div>
       
-      <div className="overflow-x-auto flex-1">
+      <div className="overflow-x-auto">
         <table className="w-full text-sm text-left">
           <thead className="text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/50">
             <tr>

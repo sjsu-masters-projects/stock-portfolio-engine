@@ -24,14 +24,14 @@ export function AllocationDonut({ allocations, totalValue }: Props) {
   }));
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="flex flex-col">
       <div className="mb-4">
         <h3 className="font-semibold text-slate-900 dark:text-white">Asset Allocation</h3>
         <p className="text-xs text-slate-500 dark:text-slate-400">Distribution by performance weight</p>
       </div>
 
-      <div className="flex-1 relative min-h-[200px]">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="flex-1 relative">
+        <ResponsiveContainer width="100%" height={160}>
           <PieChart>
             <Pie
               data={data}

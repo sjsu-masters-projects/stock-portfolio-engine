@@ -2,17 +2,26 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { PortfolioHero } from "@/components/dashboard/PortfolioHero";
-import { AllocationDonut } from "@/components/dashboard/AllocationDonut";
 import { AllocationTable } from "@/components/dashboard/AllocationTable";
-import { TrendChart } from "@/components/dashboard/TrendChart";
 import { StockTicker } from "@/components/dashboard/StockTicker";
-import { NewsFeed } from "@/components/dashboard/NewsFeed";
+
 import { RiskMetrics } from "@/components/dashboard/RiskMetrics";
 import { StockDetailModal } from "@/components/dashboard/StockDetailModal";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft } from "lucide-react";
+
+// Recharts requires DOM measurement — must skip SSR
+const TrendChart = dynamic(
+  () => import("@/components/dashboard/TrendChart").then((m) => m.TrendChart),
+  { ssr: false }
+);
+const AllocationDonut = dynamic(
+  () => import("@/components/dashboard/AllocationDonut").then((m) => m.AllocationDonut),
+  { ssr: false }
+);
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -85,7 +94,6 @@ export default function DashboardPage() {
             allocations={portfolio.allocations} 
             totalValue={portfolio.total_invested} 
           />
-          <NewsFeed symbols={portfolio.tickers_used} />
         </div>
       </div>
 
